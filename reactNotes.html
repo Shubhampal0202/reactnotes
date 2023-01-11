@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <title>React Notes</title>
+</head>
+
+<body> 
+    <div id="root"></div>
+</body>
+<script type="text/babel">
+    /*  Q1: What is React ?
+          React (also known as React.js or ReactJS) is a free and open-source 
+          front-end JavaScript library for building user interfaces based on UI components. 
+  
+          const root = ReactDOM.createRoot(document.getElementById('root'));
+          root.render(<h1>Hello, world!</h1>);
+                    or
+          ReactDOM.render(<h1>Hello, world!</h1>, document.getElementById('root'));        
+  
+     */
+
+
+    /* Q2: What is JSX ?
+   
+        JSX stands for javaScript XML. It allows us to write HTML elements along with javaScript 
+        and place them in the DOM without any CreateElement() and/or appendChild() method.
+        for example: 
+        const myElement = <h1>This is JSX</h1>
+        ReactDOM.render(myElement, document.getElementById('root'));
+   
+        without JSX
+    
+        const myElement = React.createElement('h1', {}, 'this is not JSX');
+       ReactDOM.render(myElement, document.getElementById('root'));
+   
+       => With JSX we can write expression inside curly braces {} the expression can be 
+       a React variable, or property, or any other valid javaScript Expression. JSX will 
+       execute the expression and return the result.
+     
+      for exp1:
+           function showName(user) {
+           return user.firstName + ' ' + user.lastName;
+           }
+   
+           const user = {
+           firstName: 'Aman',
+           lastName: 'Pal'
+           };
+   
+           const element = (
+           <h1>
+               Hello, {showName(user)}!
+           </h1>
+           );
+           ReactDOM.render(element, document.getElementById('root'));
+   
+           => The HTML code must be wrapped in one top level element or we can also use a React 
+           'fragment' to wrap multiple lines.
+           A fragment looks like an empty HTML tag: <> </>
+   
+           => HTML element must be closed.
+           const myElement = <input type="text"/>
+           => In JSX we use className attribute instead of class because class keyword is reserved
+           in javaScript. When JSX is rendered, it translate className attribute into class attribute
+   
+           => React support 'if statement' but not inside JSX.to able to use conditional statement
+           in JSX, you should put the 'if' statements outside of the JSX,or you could use a 
+           ternary expression instead.
+           ex:  
+           const x=5;
+           let text = 'goodbye';
+           if(x<10){
+               text = "hello";
+           } 
+           const myElement = <h1>{text}</h1>
+            ReactDOM.render(myElement, document.getElementById('root'));
+                  or
+            const x=5;
+            const myElement = <h1>{(x<10)? 'hello guys' :"goodbye"}</h1>
+            ReactDOM.render(myElement, document.getElementById('root'));
+   
+            => Normal javaScript function(in react) can also return JSX.
+        
+            function getGreeting() {
+                   const x =12;
+                   if(x<10){
+                       return <h1>hello World</h1>
+                   }else{
+                       return <h1>hello</h1>
+                   }
+                   }
+                   const res = getGreeting();
+                   // const root = ReactDOM.createRoot(document.getElementById('root'));
+                   // root.render(res);
+                   ReactDOM.render(res, document.getElementById('root'));
+             
+   
+           //  => Why JSX ?
+             the most important benefit of using jsx is to write less code.
+              JSX makes easy to write React applications because we can write  HTML 
+              elements in JavaScript and place them in the DOM
+            without any createElement()  and/or appendChild() methods.
+   
+            => React element
+              An element is a plain object describing what you want to display on the screen.
+              Elements are the smallest building blocks of React apps.
+   
+              Q3: what is rendering ?
+              Every React application has a single root dom node. Whole codes are written inside it. 
+              To render a React element, first pass the DOM element to ReactDOM.createRoot(),
+               then pass the React element to root.render():
+              rendering means to Show(display) the React elements or components on the UI.
+   
+              Exp:
+                 
+              function clock(){
+                  const element = (
+                   <div>
+                       <h1> hello world</h1>
+                   </div>
+                  )
+                  ReactDOM.render(element, document.getElementById('root'));
+              }
+              clock();
+             
+              Q4: What is conditional rendering ?
+              conditional rendering means to show(display) React elements or components on UI
+              based on some conditions.
+   
+              exp:      
+              const arr = [1,2,3,4];
+              function Condition(props){
+                  const x = props.arr;
+                  return(
+                      <>
+                       <h1>conditional rendering</h1>
+                       {
+                           x.length ==0 ? (<div> empty arr</div>) :
+                           
+                           <ul>
+                               {
+                                   x.map((elm,index)  => (
+                                       <li key = {index}>{elm}</li>
+                                   ))
+                               }
+                           </ul>
+                       }
+                      </>
+                  )
+              }
+   
+              ReactDOM.render(<Condition arr = {arr} />, document.getElementById('root'));
+   
+              Q5: What is components ?
+              Whole React application is breaked in small small components. components are isolated, independent, and 
+              reusable piece of codes which returns Jsx describing what should display on the UI.
+               
+                components are two types
+
+              functional components are like JavaScript functions. They accept arbitrary inputs (called "props") 
+              and return React elements(JSX) describing what should appear(display) on the screen(UI)
+              components are two types in React.
+              In functional components state variables are declared with the help of useState Hooks.
+                 we can update the state variable using setState() method.
+                 useState hook provides setter function for every state. using this function state variable can be
+                 updated.
+                 setterFunction(updatedValue)
+              (props.propertyName)
+         
+             function Display(){
+                 return(
+                     <div>
+                       <h1>this is component</h1>
+                    </div>
+                 )
+             }
+             ReactDOM.render(<Display />, document.getElementById('root'));
+   
+     
+             => class component
+             A class component is a JavaScript class that extends React.Component(it gives the class
+             component access to React Components functions)
+              class component has a render method that returns JSX.
+                  In class components state variable are declared inside inbuilt state object.
+                  we can update the state variable using setState() method.
+                  this.setState({key:value})
+                  (this.props.propertyName)
+              exp:   
+              class Car extends React.Component {
+               constructor() {
+                   super();
+                   this.state = {color: "red"};
+               }
+               render() {
+                   return <h2>the color of this car is {this.state.color}</h2>;
+               }
+            }
+            ReactDOM.render(<Car />, document.getElementById('root'));
+   
+    
+         => functional components
+           A React functional component is a simple JavaScript function 
+           that accepts props and returns a React element(JSX).
+   
+         
+           exp: 
+                       function Fn() {
+                       const text = 'Hello World';
+                       
+                       return (
+                           <div>
+                              <p> {text} </p>
+                           </div>
+                       );
+               }
+               ReactDOM.render(<Fn />, document.getElementById('root'));
+   
+               Q6: What is props ?
+               We use props in React to pass data from one component to another (from a parent component
+                to a child component(s)). Props is just a shorter way of saying properties. 
+               They are useful when you want the flow of data in your app to be dynamic.
+   
+               We can use props with destructuring and without destructuring
+               => without destructuring
+              
+              function Show(){
+                  return(
+                      <div>
+                        <Address  name="Shubham" city="Kanpur"/>
+                       </div>
+                  )
+              }
+               function Address(props){
+                   const name = props.name;
+                   const city = props.city;
+                   return(
+                       <>
+                       <h1>My name is {name}</h1>
+                       <h1>I  am from  {city}</h1>
+                       </>
+                   )
+               }
+               ReactDOM.render(<Show />, document.getElementById('root'));
+   
+          => with destructuring
+                function Show(){
+                  return(
+                      <div>
+                        <Address  name="Shubham" city="Kanpur"/>
+                       </div>
+                  )
+              }
+               function Address({name, city}){
+                   return(
+                       <>
+                       <h1>My name is {name}</h1>
+                       <h1>I am from  {city}</h1>
+                       </>
+                   )
+               }
+               ReactDOM.render(<Show />, document.getElementById('root'));
+    
+     
+               function Show(){
+                  return(
+                      <div>
+                        <Address />
+                       </div>
+                  )
+              }
+   
+               function Address({name="Aman", city="Delhi"}){
+                   return(
+                       <>
+                       <h1>My name is {name}</h1>
+                       <h1>I am from  {city}</h1>
+                       </>
+                   )
+               }
+                       // Address.defaultProps = {
+                       //     name: "Aman",
+                       //     city: "Delhi"
+                       // }   
+                       ReactDOM.render(<Show />, document.getElementById('root'));
+   
+                 Q7: What is state ??  
+                 The state is a built-in React object that is used to contain data or 
+                information about the component. A component’s state can change over time;
+                 whenever it changes, the component re-renders. The change in state can 
+                happen as a response to user action or system-generated events and these 
+                changes determine the behavior of the component and how it will render.   
+   
+                  
+                  class Car extends React.Component {
+                    constructor(props) {
+                        super(props);
+                        this.state = {
+                          brand : "BMW",
+                          modal : "B5",
+                          color : "black"
+                        };
+                    }
+                    render() {
+                        return (
+                        <div>
+                            <p>Brand Name : {this.state.brand}</p>
+                            <p>Modal Name : {this.state.modal}</p>
+                            <p> Color     : {this.state.color}</p>
+                        </div>
+                        );
+                    }
+                }
+                ReactDOM.render(<Car />, document.getElementById('root'));
+
+                Q8: what is life cycle of a component ?
+                 Every React Component has a lifecycle of its own, lifecycle of a component
+                  can be defined as the series of methods that are invoked in different stages 
+                  of the component’s existence.
+
+                  React component has four stages of life cycle.
+                  
+            Initialization: This is the stage where the component is constructed with the 
+            given Props and  default state. This is done in the constructor function of a
+          Component Class.
+
+          The constructor() method is called before anything else, when the component is initiated, 
+          and it is the natural place to set up the initial state and other initial values.
+        The constructor() method is called with the props, as arguments, and you should always start by calling
+         the super(props) before anything else, this will initiate the parent's constructor method and allows the 
+         component to inherit methods from its parent (React.Component).
+
+           Mounting: Mounting means putting React elements into the DOM.
+
+           Updating: a component is updated whenever the state and props are changed.
+
+           Unmounting: unmounting means when a component is removed from the dom.
+
+           Functions of each Phase of Lifecycle
+
+           Mounting: mounting has four functions
+           1) constructor(): in this method we set the initial state of the component.
+           2)getDerivedStateFromProps(): The getDerivedStateFromProps() method is called right before 
+           rendering the element(s) in the DOM.This is the natural place to set the state object based on the 
+           initial props. It takes state as an argument, and returns an object with changes to the state.
+
+           if you use The getDerivedStateFromProps() method then componentWillMount() will not work it is outdated.
+
+           2)componentWillMount(): this function is invoked right before the component is 
+           mounted on the DOM.
+
+           3)render(): render means to display the element on the UI.
+
+           4)componentDidMount() this function is invoked right after the component is
+            mounted on the DOM. 
+             
+               
+               class Mount extends React.Component{
+                    constructor(props){
+                        super(props);
+                        this.state ={
+                            count: 1
+                        }
+                    }
+                //    static getDerivedStateFromProps(props, state){
+                //         console.log("get derived");
+                //         return {count:props.cont};
+                //     }
+                    componentWillMount(){
+                  
+                        console.log("component will mount");
+                    }
+                    componentDidMount() {
+                        console.log("component did update");
+                    }
+                    render(){
+                        console.log("component is render");
+                        return(
+                            <div>
+                                <h1>count is {this.state.count}</h1>
+                             </div>
+                        )
+                    }
+               }
+               ReactDOM.render(<Mount cont = "2"/>, document.getElementById('root'));
+
+               updating : updating stage has five functions.
+               1)getDerivedStateFromProps():  This is the first method that is called when a component gets updated.
+
+               2) shouldComponentUpdate(): when state of the component is changed then this 
+              function is invoked  and decide wheather a component should update
+              or not. if it returns true then component will update if it returns false then
+               component will not update.The default value is true.
+          
+                if you use The getDerivedStateFromProps() method then componentWillMount() will not work 
+                it is outdated.        
+                3) componentWillUpdate(): As the name clearly suggests, this 
+                function is invoked before the component is rerendered i.e. this function 
+                gets invoked once before the render() function is executed after the updation 
+                of State or Props.
+
+                4) render():  again render function is called  after the componentWillUpdate
+                    method  
+                5) componentDidUpdate(): Similarly this function is invoked after 
+                the component is rerendered i.e. this function gets invoked once after the 
+                render() function is executed after the updation of State or Props.
+              
+               class Update extends React.Component{
+                    constructor(){
+                        super();
+                        this.state ={
+                            count: 1
+                        }
+                    }
+                    componentWillMount(){
+                        console.log("component will mount");
+                    }
+                    componentDidMount() {
+                        console.log("component did mount");
+                    }
+                    handleClick = ()=>{
+                        console.log("handle clicked");
+                        this.setState({
+                            count: this.state.count + 1
+                        })
+                    }
+                    render(){
+                        console.log("component is render");
+                        return(
+                            <div>
+                                <h1>count is {this.state.count}</h1>
+                                <button onClick ={this.handleClick}>click here</button>
+                             </div>
+                        )
+                    }
+                 shouldComponentUpdate() 
+                    { 
+                        console.log("shouldComponentUpdate"); 
+                        return true; 
+                    } 
+  
+                 componentWillUpdate() 
+                        { 
+                            console.log("componentWillUpdate"); 
+                        } 
+  
+                 componentDidUpdate() 
+                        { 
+                            console.log("componentDidUpdate"); 
+                        } 
+
+               }
+               ReactDOM.render(<Update />, document.getElementById('root'));
+
+               Unmounting: it has only one method
+               componentWillUnmount():this method is called just before component is removed
+               from the DOM.
+        
+       
+         class Container extends React.Component {
+                constructor(props) {
+                    super(props);// =>=>=>=>=>=.=>=>=>=>=> ye  apne parent class ke constructor ko call karta hai.
+                    this.state = {show: true};
+                }
+                delHeader = () => {
+                    this.setState({show: false});
+                }
+        render() {
+                    let myheader;
+                    if (this.state.show) {
+                    myheader = <Child />;
+                    };
+                    return (
+                    <div>
+                    {myheader}
+                    <button type="button" onClick={this.delHeader}>Delete Header</button>
+                    </div>
+                    );
+                }
+}
+
+        class Child extends React.Component {
+        componentWillUnmount() {
+            alert("The component named Header is about to be unmounted.");
+        }
+        render() {
+            return (
+            <h1>Hello World!</h1>
+            );
+        }
+        }
+        ReactDOM.render(<Container cont = "2"/>, document.getElementById('root'));
+        
+        Q9: Event handling in React
+        The actions to which javascript can respond are called Events.
+        Handling events with react elements is very similar to handling events on DOM elements. There are some 
+        syntactic difference.
+        1) React events are named using camelCase, rather than lowercase.
+        2) With JSX you pass a function as a event handler, rather than a string.
+        3) You can not return false to prevent default behaviour in React. You must call preventDefault explicitly.
+
+        In HTML
+        <button onclick = "handleClick()">click Me</button>
+        In React
+             <button onClick = {handleClick}>click Me</button> // functional component
+               <button onClick = {this.handleClick}>click Me</button> // class based component
+          React events are almost similler to HTML dom events.React events are written in 
+          camelCase syntax.
+          onClick instead of onclick.
+          React event handlers are written inside curly braces:
+          onClick={shoot}  instead of onClick="shoot()".
+        
+         function Football() {
+        const shoot = () => {
+            alert("Great Shot!");
+        }
+
+        return (
+            <button onClick={shoot}>Take the shot!</button>
+        );
+        }
+        ReactDOM.render(<Football />, document.getElementById('root'));
+
+
+        function Event(){
+            const handleClick = (e)=>{
+                e.preventDefault(); // page redirect nhi hoga
+                alert("clicked")
+            }
+            return(
+                <>
+                    <h1>Event Handlers</h1>
+                    <a href = "https://www.google.com" onClick={handleClick}> Click Me</a>
+                </>
+            )
+}
+   ReactDOM.render(<Event />, document.getElementById('root'));
+
+        Q10: What is list ?
+
+        lists means collection of items. It is  used for displaying menu and navigation bar.
+        to traverse a list, we can use map method of an array.
+        we  use javascript map function on array and returns  a <li> element for each item.
+         
+         function List(){
+             const arr = [1,2,3,4];
+             return(
+                 <>
+                  <ul>
+                    {
+                        arr.map((list,index) =>(
+                            <li key = {index}>{list}</li>
+                        ))
+                    }    
+                 </ul>
+                 </>
+             )
+         }
+         ReactDOM.render(<List />, document.getElementById('root'));
+
+         Q11: What is key in React ?
+         A "key" is a special string attribute in react you need to include when creating lists of elements.
+         keys help react identify  which items have changed, are added, or  are removed.
+         keys should be given to the elements inside the array to give the elements a stable identity.
+         keys serve as a hint to react but they don't get passed to your component.
+         if you need the same value in your component, pass it explicitly as a props with a different name.
+          from the Lists
+         A key is a unique identifier. 
+         In React, it is used to identify which items have changed, updated, or deleted
+          from the Lists. It is useful when we dynamically created components.
+
+          function User(props){
+                    return(
+                        <li>{props.value}</li>
+                    )
+         }
+function Keys(props){
+            let numbers = props.numbers;
+            const Items = numbers.map((num,index)=>{
+                return <User  key = {num} value = {num}/> // key attribute can not be passed as a props.
+            })
+            return(
+                <ul>
+                {Items}
+                </ul>
+            )
+        }
+let arr = [1,2,3,4,5]
+root.render(<Keys numbers = {arr}/>)
+          
+          Q12: What is form in React ?
+          React uses forms to allow users to interact with the web page. In React,
+           form data is usually handled by the components. When the data is handled 
+           by the components, all the data is stored in the component state. You can 
+           control changes by adding event handlers in the onChange attribute and that 
+           event handler will be used to update the state of the variable.
+
+           => controlled component:A form(input, textarea, select) element whose value is 
+           controlled by React component is called  “controlled component”. it means that the 
+           input’s value is always driven by the React state. <input type="text">, <textarea>, 
+            and <select> all work very similarly - they all accept a value attribute that
+             you can use to implement a controlled component.
+            We can display the form data entered by the user on the ui.
+             
+            hamne UI per jo value enter ki vo react ke pass gyi React ne state change ki aur updated state ko 
+            UI ko de di
+                
+  
+         
+          class GetData extends React.Component {
+              constructor(props){
+                super(props);
+                this.state = {
+                    name: "",
+                }
+              }
+              handleChange =(e)=>{
+                  this.setState({
+                      name: e.target.value,
+                      fullName: ""
+                  })
+              }
+              handleSubmit =(e)=>{
+                e.preventDefault();
+                 this.setState({
+                      fullName: this.state.name,
+                      name:""
+                  })
+              }
+              render(){
+                  return(
+                      <>
+                      <div style={{marginTop:"30px", textAlign:"center"}}>
+                        <h2>Hello {this.state.fullName}</h2>
+                        <form onSubmit = {this.handleSubmit}>
+                            <input type="text" value={this.state.name} placeholder="Enter your name" 
+                            style={{padding:"5px",marginRight:"10px"}} onChange={this.handleChange}/>
+                            <input type="submit" style={{padding:"5px"}}/>
+                        </form>
+                     </div>
+                      </>
+                  )
+              }
+          }
+
+            => Uncontrolled component: In uncontrolled components form data is handled by DOM
+            itself.
+                    function Untrolled() {
+                   const inputvalue = React.createRef();
+                    const handleSubmit = (e) => {
+                        console.log(inputvalue);
+                    }
+                return (
+                    <>
+                    <label >Name : </label>
+                    <input type="text" ref={inputvalue} />
+                    <input type="submit" value="Submit" onClick={handleSubmit} />
+
+                    </>
+
+                )
+        }
+        root.render(<Untrolled />)
+          ReactDOM.render(<GetData />, document.getElementById('root'));
+          
+          Q13: Lifting state Up
+          
+          class A  extends React.Component {  
+              constructor(){
+                  super();
+                  this.state = {
+                      text:"",
+                  }
+              }
+              setText =(enterText)=>{
+                this.setState({
+                    text:enterText
+                })
+              }
+              render(){
+                return(
+                    <>
+                    <div style={{textAlign:"center"}}>
+                        <h2>Lifting State Up</h2>
+                        <B text = {this.state.text} setText = {this.setText}/>
+                        <C text = {this.state.text}/>
+                    </div>
+                  </>
+                )
+              }
+          }
+          
+          class B extends React.Component{
+              constructor(props){
+                  super(props);
+              }
+              handleChange = (e)=>{
+                  this.props.setText(e.target.value)
+              }
+              render(){
+                  return(
+                    <input type="text" value={this.props.text} onChange={this.handleChange} placeholder="Enter some text"/>
+                  )
+              }
+          }  
+
+          class C extends React.Component{
+            constructor(props){
+                  super(props);
+              }
+              render(){
+              return(
+                <>
+                 <h2>{this.props.text}</h2>
+                </>
+              )
+              }
+          }
+          ReactDOM.render(<A />, document.getElementById('root'));
+
+          Q14:What is hooks ?
+
+          hooks are functions that provide React state and lifecycle features to functional
+          components.
+          Hooks allow us to use React state without class component.it means we can use state and 
+          other react features without writing a class component.
+          React provides a few built-in Hooks like useState, useEffect etc.
+          You can also create your own Hooks to reuse stateful behavior between different components
+          Hooks are the new addition in React 16.8
+          
+          => When use hooks 
+          If we need some state in functional components then we can use hooks.
+
+
+          => useState() : useState is a hook that allow us add React state to functional 
+          components.we call it inside a functional component to add some local state to it.
+          useState returns a pair- the current state value and a function that update the 
+          state value. React will preserve this state between re-renders.You can call this 
+          function from an event handler or somewhere else. It’s similar to this.setState 
+          in a class.
+          useState("Shubham"); => call useState
+          useState("Shubham")  It returns a pair of values: the current state and a function
+           that updates it.
+          const nameStateVariable = useState("Shubham");(Shubham is initial value for state)
+          const name = nameStateVariable[0];
+            const setName = nameStateVariable[1];
+            instead of this we can use destructuring
+            const [name, setName] = useState("Shubham");
+            When we declaring a state variable with useState, it returns a pair - an array with
+            two items.So, by writing square bracket we are doing Array destructuring.
+            
+            => Accessing State :in a function we can use state variable directly.
+            <h1> your name is {name} </h1>
+
+            Updating State
+            setName("Aman");
+
+             const [fruit, setFruit] = useState('banana');
+             This JavaScript syntax is called “array destructuring”. It means that
+              we’re making two new variables fruit and setFruit, where fruit is set to 
+              the first value returned by useState, and setFruit is the second.
+               It is equivalent to this code:
+
+             function components in React look like this:
+             const Example = (props) => {
+                // You can use Hooks here!
+                return <div />;
+                }
+
+                or
+                function Example(props) {
+                // You can use Hooks here!
+                return <div />;
+                }
+                   
+                    function Us(){
+                        const [count, setCount] = React.useState(0);
+                        return(
+                            <>
+                           <div style={{textAlign:"center"}}>
+                            <h1>{count}</h1>
+                             <button onClick = {()=>setCount(count+1)}>+1</button>
+                             <button onClick = {()=>setCount(count-1)} style = {{marginLeft:"20px"}}>-1</button></div>
+                            </>
+                        )
+                    }
+                    ReactDOM.render(<Us />, document.getElementById('root'));
+
+                    Q15:  what is useEffect(EffectHook)?
+
+                    The useEffect Hook allows you to perform side effects in your components.
+                    Some examples of side effects are: fetching data, directly updating the DOM,
+                     and timers. useEffect accepts two arguments. The second argument is
+                      optional. useEffect(<function>, <dependency>)
+                    
+                        
+                        //   here  we are not providing any dependencies   
+                        function Timer(){
+                            const [count, setCount] = React.useState(0);
+                            React.useEffect(()=>{
+                                console.log("useEffect");
+                                setTimeout(()=>{
+                                    setCount(count + 1);
+                                }, 1000)
+                            })
+                            console.log("render");
+                            return(
+                                <>
+                                 <h1>I have rendered {count} times!</h1>
+                                </>
+                            )
+                        }
+                        ReactDOM.render(<Timer />, document.getElementById('root'));
+                      
+                 /*
+                 useEffect runs on every render. That means that when the count changes,
+                  a render happens, which then triggers another effect.If we call useEffect
+                  without any dependency then it behave like componentDidMount() and
+                   componentDidUpdate()
+
+                 We can  include the second parameter which accepts an array. 
+                 We can optionally pass dependencies to useEffect in this array.
+
+                 1. No dependency passed:
+                    useEffect(() => {
+                    //Runs on every render
+                    });
+
+                    2. An empty array:
+                    useEffect(() => {
+                    //Runs only on the first render
+                    }, []);
+
+                    3. Props or state values:
+                        useEffect(() => {
+                        //Runs on the first render
+                        //And any time any dependency value changes
+                        }, [prop, state]);
+
+                    Here we are providing an empty array as a dependency
+                  
+                        function Timer(){
+                            const [count, setCount] = React.useState(0);
+                            React.useEffect(()=>{
+                                // console.log("useEffect");
+                                setTimeout(()=>{
+                                    setCount((count) => count + 1);
+                                }, 1000)
+                            },[]) // <- add empty brackets here
+                            // console.log("render");
+                            return(
+                                <>
+                                 <h1>I have rendered {count} times!</h1>
+                                </>
+                            )
+                        }
+                        ReactDOM.render(<Timer />, document.getElementById('root'));
+                        // When we provide an empty array to useEffect then it behaves like 
+                        // componentDidMount().
+
+                       Here we provide a dependency array. useEffect depends on state variable
+                        If the count variable updates, the effect will run again: 
+                         function Counter() {
+                                    const [count, setCount] = React.useState(0);
+                                    const [calculation, setCalculation] = React.useState(0);
+
+                                    React.useEffect(() => {
+                                        console.log("useEffect");
+                                        setCalculation(() => count * 2);
+                                    }, [count]); // <- add the count variable here
+                                    console.log("render");
+                                    return (
+                                        <>
+                                        <p>Count: {count}</p>
+                                        <button onClick={() => setCount((c) => c + 1)}>+</button>
+                                        <p>Calculation: {calculation}</p>
+                                        </>
+                                    );
+                                }    
+                                ReactDOM.render(<Counter />, document.getElementById('root'));
+
+                            Q16:What is prop drilling :
+
+                            prop drilling means  passing data through each  nested children
+                             components.The problem with this approach is that most of the
+                              components through which this data is passed have no actual need 
+                              for this data.     
+                             
+                              const PropDrilling = ()=>{
+                                  const[name, setName] = React.useState("Shubham");
+
+                                return(
+                                    <> 
+                                    <h1>Prop Drilling</h1>
+                                    <A firstName = {name}/>
+                                    </>
+                                )
+                              }   
+
+                              const A = ({firstName})=>{
+                                  return(
+                                      <>
+                                        <h1>Comp A</h1>
+                                        <B firstName = {firstName} />
+                                      </>
+                                  )
+                              }
+
+                              const B = ({firstName})=>{
+                                  return(
+                                      <>
+                                        <h1>Comp B</h1>
+                                        <C firstName = {firstName} />
+                                      </>
+                                  )
+                              }
+
+                              const C = ({firstName})=>{
+                                  return(
+                                      <>
+                                        <h1>Comp C</h1>
+                                        <h2>Your name is {firstName}</h2>
+                                      </>
+                                  )
+                              }
+                              ReactDOM.render(<PropDrilling />, document.getElementById('root'));
+                              Q17: What is useContext hook ?
+
+                              Context provides a way to pass data through the component tree without having
+                               to pass props down manually at every level.
+
+                              useContext hook makes it easy to pass data throughout your
+                               app without manually passing props down the tree.Basically 
+                               it is the part of React’s Context API.
+
+                               The useContext accepts the value provided by React.createContext and then re-render
+                                the component whenever its value changes but you can still optimize its performance by
+                                 using memoization.
+
+
+                                  // Create a Context
+                                  const firstName = React.createContext();
+                                    // It returns an object with 2 property:
+                                    // { Provider, Consumer }instead of consumer we use 
+                                    useContext hook.
+
+                                   const Context =()=>{
+
+                                      // Use the Provider to make a value available to all
+                                         children and grandchildren.
+                                       const [name, setName] = React.useState("Shubham");
+                                       return(
+                                        // Next we'll use the Context Provider to wrap the tree of components 
+                                        that need the state Context.
+                                           <firstName.Provider value={name}>
+                                            <h1>hello {name}</h1>
+                                            <A />
+                                            </ firstName.Provider>
+                                       ) 
+                                   }
+
+                                   const A = ()=>{
+                                  return(
+                                       <>
+                                        <h1>Comp A</h1>
+                                        <B />
+                                      </>
+                                  )
+                              }
+
+                              const B = ()=>{
+                                  return(
+                                      <>
+                                        <h1>Comp B</h1>
+                                        <C />
+                                      </>
+                                  )
+                              }
+
+                              
+
+                              const C = ()=>{
+                             // Use the Consumer(or useContext) to grab the value from context
+                                    // Notice this component didn't get any props!
+                                  const name = React.useContext(firstName);
+                                  return(
+                                      <>
+                                        <h1>Comp C</h1>
+                                         <h2>hello {name}</h2>
+                                      </>
+                                  )
+                              }
+
+                              ReactDOM.render(<Context />, document.getElementById('root'));
+
+                           Q18: What is useRef() hook ?
+
+                        useRef() hook is used  to access DOM elements. This is performed in 3 steps:
+                        Define the reference to access the element const elementRef = useRef();
+                        Assign the reference to ref attribute of the element: <div ref={elementRef}></div>;
+                        After mounting, elementRef.current points to the DOM element.
+
+                        useRef returns a mutable ref object whose .current property is initialized to the passed 
+                        argument (initialValue). The returned object will persist for the full lifetime of the 
+                        component.
+                               
+                                function Ref (){
+                                    const elementRef = React.useRef();
+                                    // useRef returns an object with property current.
+                                    const handleSubmit =()=>{
+                                        console.log(elementRef.current.innerText);
+                                        elementRef.current.style.color = "red";
+                                    }
+                                    return(
+                                        <>
+                                          <div ref = {elementRef}>this is a div element</div>
+                                          <input type="submit" value="submit" onClick={handleSubmit}/>
+                                        </>
+                                    )
+                                }
+                                ReactDOM.render(<Ref />, document.getElementById('root'));
+
+                                function App() {
+                                    const [inputValue, setInputValue] = useState("");
+                                    const count = useRef(0);
+
+                                    useEffect(() => {
+                                        count.current = count.current + 1;
+                                    });
+
+                                    return (
+                                        <>
+                                        <input
+                                            type="text"
+                                            value={inputValue}
+                                            onChange={(e) => setInputValue(e.target.value)}
+                                        />
+                                        <h1>Render Count: {count.current}</h1>
+                                        </>
+                                    );
+                                    }
+                                    
+                   
+                            function AutoFocus(){
+                               const elementRef = React.useRef();
+                                const handleSubmit = (e)=>{
+                                    e.preventDefault();
+                                elementRef.current.focus();
+                                // console.log(elementRef.current.value);
+                                }
+                             return(
+                                   <>
+                                     <form action="" onSubmit={handleSubmit}>
+                                        <input type="text" ref={elementRef} />
+                                       <button  type="submit"> click me</button>
+                                    </form>
+                                    </>
+                                 )
+                                    }
+                             ReactDOM.render(<AutoFocus />, document.getElementById('root'));
+
+
+
+                   What is a ref ?
+
+                    A ref is defined as any value that does not trigger a component re-render when it is changed.
+                     This behavior is contrary to the function of states and props. A ref can be created in two
+                     ways- by the useRef hook or by the createRef function.
+                      
+                     useRef: The useRef is a hook that uses the same ref throughout. It saves its value between
+                      re-renders in a functional component and doesn’t create a new instance of the ref for every
+                     re-render. It persists the existing ref between re-renders.
+
+                     createRef: The createRef is a function that creates a new ref every time. Unlike the useRef, 
+                     it does not save its value between re-renders, instead creates a new instance of the ref for 
+                     every re-render. Thus implying that it does not persist the existing ref between re-renders.
+
+                     
+                    export default function App() {
+                    const [counter, setCounter] = useState(0);
+                    const ref = useRef();
+                    
+                    useEffect(() => {
+                        ref.current = "GeeksforGeeeks";
+                    }, []);
+                    
+                    useEffect(
+                        () => {
+                        console.log(counter, ref.current);
+                        },
+                        [counter]
+                    );
+                    
+                    return (
+                        <div className="App">
+                        <header className="App-header">
+                            <h3>Example on useRef</h3>
+                            <button onClick={() => setCounter((c) => c + 1)}>
+                            Increment
+                            </button>
+                            <h5>Counter Value: {counter}</h5>{" "}
+                        </header>
+                        </div>
+                    );
+                    }
+
+                    export default function App() {
+                        const [counter, setCounter] = useState(0);
+                        const ref = createRef();
+                        
+                        useEffect(() => {
+                            ref.current = "GeeksforGeeeks";
+                        }, []);
+                        
+                        useEffect(
+                            () => {
+                            console.log(counter, ref.current);
+                            },
+                            [counter]
+                        );
+                        
+                        return (
+                            <div className="App">
+                            <header className="App-header">
+                                <h3>Example on createRef</h3>
+                                <button onClick={() => setCounter((c) => c + 1)}>
+                                Increment
+                                </button>
+                                <h5>Counter Value: {counter}</h5>{" "}
+                            </header>
+                            </div>
+                        );
+                        }
+
+                     Q19: What is useReducer hook ?
+
+                        useReducer hook is the alternative of useState hook basically it handles
+                              the complex state manipulations and state transitions.It accepts 
+                              a reducer function, and an initial state and returns an array with two 
+                              values.The first one is the state value, and the second value is
+                               the dispatch function which is further used to trigger an action.
+                               The “state” can be of  any kind. It doesn’t have to be an object
+                                always. It could be a number, or an array, or anything else. 
+                              
+                                 const counterReducer = (state,action)=>{
+                                    //  console.log("state",state);
+                                    //  console.log("action",action);
+                                    if(action.type ==="Increment"){
+                                        return{
+                                            count: state.count +1
+                                        }
+                                    }
+                                     return state;
+
+                                 }
+                            function UseReducer(){
+                                const [state, dispatch] = React.useReducer(counterReducer,{count:0});
+                                return(
+                                    <>
+                                     <h1>{state.count}</h1>
+                                     <button onClick={()=>dispatch({type:"Increment"})}>+</button>
+                                    </>
+                                )
+                            }
+                            ReactDOM.render(<UseReducer />, document.getElementById('root')); 
+
+                            Q20: What is useMemo hook ?
+
+                             useMemo hook takes two parameter first one is callback function and second is 
+                             array of dependencies and returns a memoized value. It will only 
+                             execut  your function when the dependent state variable changes and returns memoized value
+                             . This optimization helps to avoid expensive calculations
+                               on every render. Memoized menas A technique in which partial
+                                results are recorded (forming a memo) and then can be re-used 
+                                later without having to recompute them.
+
+                               */
+
+    function UseMemo() {
+        console.log(".............")
+        const [count, setCount] = React.useState(0);
+        const [item, setItem] = React.useState(10);
+
+        //   function MultiCount(){
+        // let i=0;
+        // while(i<2000000000) i++;
+        //       console.log("MultiCount");
+        //       return count *5;
+        //   }
+        // useMemo avoid the execution of unwanted function.  It is called before 
+        // the Rendering.
+        const MultiCount = React.useMemo(() => {
+            let i = 0;
+            while (i < 2000000000) i++;
+            console.log("MultiCount");
+            return count * 5;
+        }, [count])
+        console.log("render");
+        return (
+            <>
+                <h1> useMemo</h1>
+                <h2>Count : {count}</h2>
+                <h2>Item : {item}</h2>
+                <h2>MultiCount : {MultiCount}</h2>
+                <button onClick={() => setCount(count + 1)}>UpdateCount</button>
+                <button onClick={() => setItem(item * 10)}>UpdateItem</button>
+            </>
+        )
+    }
+    ReactDOM.render(<UseMemo />, document.getElementById('root'));
+
+
+                        //   Q21: Difference between useMemo hook and useCallback hook.
+                        //  Q22: What is useReducer hooks ?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
+</html>
